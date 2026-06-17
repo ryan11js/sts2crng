@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>STS2 CRNG Lab</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <aside class="control-panel" aria-label="Run observations">
+        <div class="brand-block">
+          <p class="eyebrow">Slay the Spire 2</p>
+          <h1>CRNG Lab</h1>
+          <p class="source-note">Article-seeded predictions for beta v0.107.0, built to be replaced by simulator data.</p>
+        </div>
+
+        <form id="run-form" class="run-form">
+          <section class="panel-section">
+            <h2>Run</h2>
+            <label>
+              Patch data
+              <select id="patch" name="patch">
+                <option value="v0.107.0">v0.107.0 beta article pack</option>
+              </select>
+            </label>
+
+            <label>
+              Mode
+              <select id="mode" name="mode">
+                <option value="single">Single-player</option>
+                <option value="multiplayer" disabled>Multiplayer later</option>
+              </select>
+            </label>
+
+            <label>
+              Character
+              <select id="character" name="character">
+                <option value="ironclad">Ironclad</option>
+                <option value="silent">Silent</option>
+                <option value="defect">Defect</option>
+                <option value="necrobinder">Necrobinder</option>
+                <option value="regent">Regent</option>
+                <option value="unknown">Unknown</option>
+              </select>
+            </label>
+
+            <label>
+              Act 1
+              <select id="act" name="act">
+                <option value="unknown">Unknown</option>
+                <option value="underdocks">Underdocks</option>
+                <option value="overgrowth">Overgrowth</option>
+              </select>
+            </label>
+          </section>
+
+          <section class="panel-section">
+            <h2>Neow</h2>
+            <label>
+              Curse-pool relic seen
+              <select id="curseRelic" name="curseRelic">
+                <option value="unknown">Unknown</option>
+              </select>
+            </label>
+
+            <label>
+              RNG-affecting pick
+              <select id="neowConsumption" name="neowConsumption">
+                <option value="neutral">No early reward RNG consumed</option>
+                <option value="reward">Picked card reward or random relic</option>
+                <option value="niche">Picked New Leaf, Kaleidoscope, or Niche-consuming relic</option>
+                <option value="unknown">Not sure</option>
+              </select>
+            </label>
+
+            <label>
+              Starting relics / notes
+              <textarea id="notes" name="notes" rows="3" placeholder="Starter relic, Neow relics, swaps, anything weird..."></textarea>
+            </label>
+          </section>
+
+          <section class="panel-section">
+            <h2>Observed Later</h2>
+            <label>
+              First fight gold
+              <select id="firstFightGold" name="firstFightGold">
+                <option value="unknown">Unknown</option>
+              </select>
+            </label>
+
+            <label>
+              First combat reward type
+              <select id="firstRewardType" name="firstRewardType">
+                <option value="unknown">Unknown</option>
+                <option value="commonPotion">Common potion</option>
+                <option value="uncommonPotion">Uncommon potion</option>
+                <option value="rarePotion">Rare potion</option>
+                <option value="commonCard">Common card</option>
+              </select>
+            </label>
+          </section>
+        </form>
+      </aside>
+
+      <section class="workspace" aria-live="polite">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Conditioned Predictions</p>
+            <h2 id="summary-title">Add observations to narrow the run.</h2>
+          </div>
+          <button id="reset-button" type="button">Reset</button>
+        </div>
+
+        <div id="status-strip" class="status-strip"></div>
+        <div id="next-actions" class="next-actions"></div>
+        <div id="prediction-grid" class="prediction-grid"></div>
+      </section>
+    </main>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
