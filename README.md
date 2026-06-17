@@ -14,6 +14,8 @@ python -m http.server 5173
 
 Then open <http://localhost:5173/>.
 
+Or visit <http://ryanschatz.net/sts2/>
+
 ## What Works Now
 
 - Select character, Act 1, Neow curse-pool relic, RNG-affecting Neow pick, first fight gold, and first combat reward type.
