@@ -16,37 +16,26 @@
         </div>
 
         <form id="run-form" class="run-form">
+          <input type="hidden" id="patch" name="patch" value="v0.107.0">
+          <input type="hidden" id="mode" name="mode" value="single">
+          <input type="hidden" id="playerOffset" name="playerOffset" value="">
+
           <section class="panel-section">
-            <h2>Run</h2>
-            <label>
-              Patch data
-              <select id="patch" name="patch">
-                <option value="v0.107.0">v0.107.0 beta article pack</option>
-              </select>
-            </label>
-
-            <label>
-              Mode
-              <select id="mode" name="mode">
-                <option value="single">Single-player</option>
-                <option value="multiplayer" disabled>Multiplayer later</option>
-              </select>
-            </label>
-
+            <h2>1. Start</h2>
             <label>
               Character
               <select id="character" name="character">
+                <option value="unknown">Unknown</option>
                 <option value="ironclad">Ironclad</option>
                 <option value="silent">Silent</option>
                 <option value="defect">Defect</option>
                 <option value="necrobinder">Necrobinder</option>
                 <option value="regent">Regent</option>
-                <option value="unknown">Unknown</option>
               </select>
             </label>
 
             <label>
-              Act 1
+              Starting act
               <select id="act" name="act">
                 <option value="unknown">Unknown</option>
                 <option value="underdocks">Underdocks</option>
@@ -56,41 +45,36 @@
           </section>
 
           <section class="panel-section">
-            <h2>Neow</h2>
+            <h2>2. Neow screen</h2>
             <label>
-              Curse-pool relic seen
+              Neow relic shown
               <select id="curseRelic" name="curseRelic">
-                <option value="unknown">Unknown</option>
+                <option value="unknown">Not at Neow yet</option>
               </select>
             </label>
 
             <label>
-              RNG-affecting pick
+              What you picked
               <select id="neowConsumption" name="neowConsumption">
-                <option value="neutral">No early reward RNG consumed</option>
-                <option value="reward">Picked card reward or random relic</option>
-                <option value="niche">Picked New Leaf, Kaleidoscope, or Niche-consuming relic</option>
-                <option value="unknown">Not sure</option>
+                <option value="neutral">No card or random relic appeared</option>
+                <option value="reward">A card reward or random relic appeared</option>
+                <option value="niche">New Leaf or Kaleidoscope triggered</option>
+                <option value="unknown">Not sure yet</option>
               </select>
-            </label>
-
-            <label>
-              Starting relics / notes
-              <textarea id="notes" name="notes" rows="3" placeholder="Starter relic, Neow relics, swaps, anything weird..."></textarea>
             </label>
           </section>
 
           <section class="panel-section">
-            <h2>Observed Later</h2>
+            <h2>3. First fight</h2>
             <label>
-              First fight gold
+              Gold from fight 1
               <select id="firstFightGold" name="firstFightGold">
                 <option value="unknown">Unknown</option>
               </select>
             </label>
 
             <label>
-              First combat reward type
+              First reward after fight 1
               <select id="firstRewardType" name="firstRewardType">
                 <option value="unknown">Unknown</option>
                 <option value="commonPotion">Common potion</option>

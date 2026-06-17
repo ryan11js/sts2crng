@@ -1,15 +1,4 @@
-export const versionPack = {
-  id: "v0.107.0",
-  label: "STS2 beta v0.107.0 article pack",
-  sourceUrl: "https://tck.mn/blog/correlated-randomness-sts2/",
-  sourceLabel: "Andy Tockman, Correlated randomness in Slay the Spire 2",
-  sourceDate: "2026-06-15",
-  notes: [
-    "Single-player only. Multiplayer event RNG offsets depend on Steam ID.",
-    "Article-derived data should be treated as calibration until simulator validation lands.",
-    "Predictions involving reward RNG can be invalid after Neow choices that create cards or relics."
-  ]
-};
+const sourceUrl = "https://tck.mn/blog/correlated-randomness-sts2/";
 
 export const characters = [
   { id: "ironclad", label: "Ironclad" },
@@ -31,7 +20,7 @@ export const cursePoolRelics = [
   { id: "SilverCrucible", label: "Silver Crucible" }
 ];
 
-export const tables = {
+const articleTables = {
   actRelicDistribution: {
     underdocks: {
       CursedPearl: 11.95,
@@ -313,6 +302,154 @@ export const tables = {
     commonCard: { ElectricShrymp: 16.52, GlassEye: 23.65, SandCastle: 37.47, GemOrGlass: 22.36 }
   }
 };
+
+const articleRecipes = {
+  actOneVariant: {
+    id: "actOneVariant",
+    label: "Act 1 variant",
+    stream: "seed",
+    relationship: "Act 1 branch is the first high-signal observation used by the article tables.",
+    tablePath: "tables.actRelicDistribution",
+    status: "tableOnly",
+    reason: "The current repo has article distributions but not the confirmed seed parser and Act-selection call order."
+  },
+  neowCursePoolRelic: {
+    id: "neowCursePoolRelic",
+    label: "Neow relic offer",
+    stream: "neow",
+    relationship: "Conditioned by Act 1 and used as the main early-run correlation anchor.",
+    tablePath: "tables.actRelicDistribution",
+    status: "tableOnly",
+    reason: "The list order and seed offset still need simulator validation before this can be generated."
+  },
+  neowBonesCurse: {
+    id: "neowBonesCurse",
+    label: "Neow's Bones curse",
+    stream: "niche",
+    relationship: "Neow's Bones curse outcome after selecting that relic.",
+    tablePath: "tables.neowsBonesCurse",
+    status: "tableOnly",
+    invalidatedBy: ["niche-consuming Neow relics"],
+    reason: "The Niche stream relationship is known from the article, but the repo does not yet encode the exact call order."
+  },
+  largeCapsuleRarity: {
+    id: "largeCapsuleRarity",
+    label: "Large Capsule first relic rarity",
+    stream: "relic",
+    relationship: "First relic rarity after selecting Large Capsule.",
+    tablePath: "tables.largeCapsuleRarity",
+    status: "tableOnly",
+    reason: "Relic rarity thresholds and call order need simulator validation."
+  },
+  firstPotionDrop: {
+    id: "firstPotionDrop",
+    label: "First fight potion drop",
+    stream: "reward",
+    relationship: "First reward RNG call.",
+    tablePath: "tables.firstPotionDrop",
+    status: "tableOnly",
+    invalidatedBy: ["Neow card reward", "Neow random relic"],
+    reason: "The UI already warns when Neow creates a card reward or random relic; generation waits on encoded reward call-order rules."
+  },
+  firstQuestionCombat: {
+    id: "firstQuestionCombat",
+    label: "First question mark combat",
+    stream: "event",
+    relationship: "Early event RNG call conditioned by Act 1 and Neow relic.",
+    tablePath: "tables.firstQuestionCombat",
+    status: "tableOnly",
+    reason: "Single-player event tables are present, but event stream offsets and node call order are not encoded."
+  },
+  trashHeap: {
+    id: "trashHeap",
+    label: "Trash Heap card and relic-pair implications",
+    stream: "event",
+    relationship: "Event RNG outcome in Underdocks.",
+    tablePath: "tables.trashHeap",
+    status: "tableOnly",
+    reason: "Event list order and co-op offset behavior need simulator coverage before generation."
+  },
+  dollRoom: {
+    id: "dollRoom",
+    label: "Doll Room one-doll result",
+    stream: "event",
+    relationship: "Event RNG outcome with one-doll option; two-doll result advances cyclically.",
+    tablePath: "tables.dollRoom",
+    status: "tableOnly",
+    reason: "Article table is encoded; simulator recipe needs exact event call index."
+  },
+  tezcataraOptionOne: {
+    id: "tezcataraOptionOne",
+    label: "Tezcatara option 1",
+    stream: "event",
+    relationship: "Event option roll conditioned by Act 1 and Neow relic.",
+    tablePath: "tables.tezcataraOptionOne",
+    status: "tableOnly",
+    reason: "Article table is encoded; simulator recipe needs exact event call index."
+  },
+  paelOptionTwo: {
+    id: "paelOptionTwo",
+    label: "Pael option 2",
+    stream: "event",
+    relationship: "Second-roll proxy conditioned by first-fight gold.",
+    tablePath: "tables.paelOptionTwoByGold",
+    status: "tableOnly",
+    reason: "Article table assumes Ascension 3+ first-fight gold behavior; generator needs gold-roll rules."
+  },
+  orobasOption: {
+    id: "orobasOption",
+    label: "Orobas option",
+    stream: "event",
+    relationship: "Third-roll proxy conditioned by first combat reward type.",
+    tablePath: "tables.orobasOptionByReward",
+    status: "tableOnly",
+    reason: "Article table is encoded; uncommon-card row and exact reward proxy need simulator validation."
+  }
+};
+
+export const articlePackV01070 = {
+  id: "v0.107.0",
+  label: "STS2 beta v0.107.0 article pack",
+  sourceUrl,
+  sourceLabel: "Andy Tockman, Correlated randomness in Slay the Spire 2",
+  sourceDate: "2026-06-15",
+  mode: "single",
+  supportedModes: ["single"],
+  coop: {
+    status: "planned",
+    eventOffset: "playerProfile",
+    note:
+      "Co-op uses the same simulator shape but needs a per-player event offset profile because event RNG can depend on Steam ID."
+  },
+  notes: [
+    "Single-player calibrated. Co-op event RNG offsets need a per-player calibration profile before recommendations are enabled.",
+    "Article-derived data should be treated as calibration until simulator validation lands.",
+    "Predictions involving reward RNG can be invalid after Neow choices that create cards or relics."
+  ],
+  tables: articleTables,
+  recipes: articleRecipes,
+  unsupportedRecipes: [
+    {
+      id: "seedParser",
+      label: "STS2 seed parsing",
+      reason: "The local tool does not yet encode the STS2 seed string/base conversion and stream seed offsets."
+    },
+    {
+      id: "coopEventOffset",
+      label: "Co-op event offset profile",
+      reason: "The article notes co-op event RNG offsets depend on Steam ID; the local tool needs consenting player calibration data."
+    },
+    {
+      id: "moddedPatchMetadata",
+      label: "Modded/current-patch metadata exporter",
+      reason: "Deferred for this pass; versioned data-pack import/export can consume this later."
+    }
+  ]
+};
+
+export const dataPacks = [articlePackV01070];
+export const versionPack = articlePackV01070;
+export const tables = articlePackV01070.tables;
 
 export function relicLabel(id) {
   return cursePoolRelics.find((relic) => relic.id === id)?.label ?? id;

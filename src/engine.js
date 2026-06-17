@@ -47,31 +47,32 @@ function getActLabel(act) {
 function getConsumptionWarnings(state) {
   if (state.neowConsumption === "reward") {
     return [
-      "Reward RNG predictions may be invalid because an early card reward or random relic can consume the first reward roll."
+      "First-fight reward predictions may be off because Neow created a card reward or random relic first."
     ];
   }
   if (state.neowConsumption === "niche") {
     return [
-      "Niche RNG predictions may be invalid because New Leaf, Kaleidoscope, or a similar relic can consume the Niche stream."
+      "Some Neow relic predictions may be off because New Leaf, Kaleidoscope, or a similar effect changed that random sequence."
     ];
   }
   if (state.neowConsumption === "unknown") {
-    return ["Some predictions may be invalid until the Neow pick is classified."];
+    return ["Some predictions may be off until the Neow choice is recorded."];
   }
   return [];
 }
 
 export function buildState(formData) {
+  const playerOffset = formData.get("playerOffset");
   return {
     patch: formData.get("patch"),
     mode: formData.get("mode"),
+    playerOffset: playerOffset === null || playerOffset === "" ? null : playerOffset,
     character: formData.get("character"),
     act: formData.get("act"),
     curseRelic: formData.get("curseRelic"),
     neowConsumption: formData.get("neowConsumption"),
     firstFightGold: formData.get("firstFightGold"),
-    firstRewardType: formData.get("firstRewardType"),
-    notes: formData.get("notes")?.trim() ?? ""
+    firstRewardType: formData.get("firstRewardType")
   };
 }
 
@@ -96,12 +97,19 @@ export function buildStatusPills(state) {
   const warnings = getConsumptionWarnings(state);
   const pills = [
     { label: versionPack.label },
-    { label: "Single-player calibration" },
+    { label: "Single-player calibrated" },
     { label: state.act === "unknown" ? "Act unknown" : getActLabel(state.act) }
   ];
 
+  if (state.mode === "coop") {
+    pills.push({
+      label: "Co-op offset profile not enabled in this pack",
+      warn: true
+    });
+  }
+
   if (state.curseRelic !== "unknown") {
-    pills.push({ label: `Neow: ${relicLabel(state.curseRelic)}` });
+    pills.push({ label: `Neow relic: ${relicLabel(state.curseRelic)}` });
   }
   warnings.forEach((warning) => pills.push({ label: warning, warn: true }));
   return pills;
@@ -109,20 +117,23 @@ export function buildStatusPills(state) {
 
 export function nextActions(state) {
   const actions = [];
+  if (state.character === "unknown") {
+    actions.push("Record your character.");
+  }
   if (state.act === "unknown") {
-    actions.push("Lock Act 1 first; act alone strongly changes several early predictions.");
+    actions.push("Record the starting act first.");
   }
   if (state.curseRelic === "unknown") {
-    actions.push("Record the curse-pool relic shown by Neow.");
+    actions.push("At Neow, record the relic shown on the screen.");
   }
   if (state.neowConsumption === "unknown") {
-    actions.push("Classify whether your Neow pick consumed reward or Niche RNG.");
+    actions.push("After choosing Neow, record whether a card reward, random relic, New Leaf, or Kaleidoscope appeared.");
   }
   if (state.firstFightGold === "unknown") {
-    actions.push("Record first-fight gold to unlock Pael and Divination-style second-roll predictions.");
+    actions.push("After fight 1, record the gold amount.");
   }
   if (state.firstRewardType === "unknown") {
-    actions.push("Record the first combat reward type to unlock Orobas predictions.");
+    actions.push("After fight 1, record the first reward type.");
   }
   return actions.slice(0, 4);
 }
@@ -135,10 +146,10 @@ export function buildPredictions(state) {
   if (actKnown) {
     predictions.push(
       card({
-        title: "Neow curse-pool relic odds",
+        title: "Neow relic odds",
         subtitle: getActLabel(state.act),
         distribution: tables.actRelicDistribution[state.act],
-        note: "This describes which curse-pool relic appears on the Neow screen, conditioned only on Act 1.",
+        note: "This describes which Neow relic appears after the starting act is known.",
         featured: !relicKnown
       })
     );
@@ -150,7 +161,7 @@ export function buildPredictions(state) {
         title: "Neow's Bones curse",
         subtitle: getActLabel(state.act),
         distribution: tables.neowsBonesCurse[state.act],
-        note: "Assumes the relics rolled by Neow's Bones do not consume the Niche RNG before the curse.",
+        note: "Assumes no New Leaf, Kaleidoscope, or similar Neow effect happened before the curse.",
         featured: true
       })
     );
@@ -204,7 +215,7 @@ export function buildPredictions(state) {
         distribution: inverseBinary(potionChance, "Potion", "No potion"),
         note:
           state.neowConsumption === "reward"
-            ? "Warning: Neow card/relic generation can steal the reward RNG roll behind this table."
+            ? "Warning: a Neow card reward or random relic can change this first-fight reward prediction."
             : "Based on the first reward RNG call.",
         featured: true
       })
@@ -306,9 +317,9 @@ export function buildPredictions(state) {
   if (predictions.length === 0) {
     predictions.push({
       title: "No hard prediction yet",
-      subtitle: "Need at least Act 1 or Neow relic",
+      subtitle: "Need starting act or Neow relic",
       items: [],
-      note: "Pick Underdocks or Overgrowth, then add the curse-pool relic from Neow to light up the tables.",
+      note: "Choose Underdocks or Overgrowth, then add the relic shown at Neow to light up the tables.",
       confidence: "waiting",
       sourceHref
     });

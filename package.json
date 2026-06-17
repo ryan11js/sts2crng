@@ -1,0 +1,11 @@
+{
+  "name": "sts2-crng-lab",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate:rng": "node scripts/validate-rng.mjs",
+    "validate:pack": "node scripts/validate-article-pack.mjs",
+    "generate:pack": "node scripts/generate-pack.mjs --version v0.107.0 --samples 1000000"
+  }
+}

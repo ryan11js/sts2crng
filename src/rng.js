@@ -58,6 +58,28 @@ export class LegacyDotNetRandom {
     return retVal;
   }
 
+  clone() {
+    const copy = Object.create(LegacyDotNetRandom.prototype);
+    copy.seedArray = [...this.seedArray];
+    copy.inext = this.inext;
+    copy.inextp = this.inextp;
+    return copy;
+  }
+
+  advance(count) {
+    if (!Number.isInteger(count) || count < 0) {
+      throw new RangeError("count must be a non-negative integer");
+    }
+    for (let i = 0; i < count; i += 1) {
+      this.internalSample();
+    }
+    return this;
+  }
+
+  next() {
+    return this.internalSample();
+  }
+
   nextDouble() {
     return this.internalSample() * (1.0 / MBIG);
   }
@@ -67,6 +89,27 @@ export class LegacyDotNetRandom {
       throw new RangeError("maxValue must be a positive integer");
     }
     return Math.floor(this.nextDouble() * maxValue);
+  }
+
+  nextRange(minValue, maxValue) {
+    if (!Number.isInteger(minValue) || !Number.isInteger(maxValue)) {
+      throw new RangeError("minValue and maxValue must be integers");
+    }
+    if (minValue > maxValue) {
+      throw new RangeError("minValue must be less than or equal to maxValue");
+    }
+    const range = maxValue - minValue;
+    if (range === 0) {
+      return minValue;
+    }
+    return minValue + this.nextInt(range);
+  }
+
+  nextChoice(items) {
+    if (!Array.isArray(items) || items.length === 0) {
+      throw new RangeError("items must be a non-empty array");
+    }
+    return items[this.nextInt(items.length)];
   }
 }
 
