@@ -6,6 +6,13 @@
   "scripts": {
     "validate:rng": "node scripts/validate-rng.mjs",
     "validate:pack": "node scripts/validate-article-pack.mjs",
-    "generate:pack": "node scripts/generate-pack.mjs --version v0.107.0 --samples 1000000"
+    "generate:pack": "node scripts/generate-pack.mjs --version v0.107.0 --mode single --samples 1000000 --out generated/v0.107.0/single/generated-pack.json",
+    "compare:pack": "node scripts/compare-generated-pack.mjs --version v0.107.0 --generated generated/v0.107.0/single/generated-pack.json --tolerance 0.25",
+    "compare:pack:research": "node scripts/compare-generated-pack.mjs --version v0.107.0 --generated generated/v0.107.0/single/generated-pack.json --tolerance 0.25 --allow-pending",
+    "runs:import": "node scripts/collect/import-runs.mjs",
+    "runs:summarize": "node scripts/collect/summarize-runs.mjs",
+    "coop:calibrate": "node scripts/sim/calibrate-coop-offsets.mjs",
+    "coverage": "node scripts/sim/report-coverage.mjs",
+    "suggest": "node scripts/sim/suggest-next-observations.mjs"
   }
 }

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "source": "manual",
+  "gameVersion": "v0.107.0",
+  "packId": "v0.107.0",
+  "mode": "coop",
+  "partyId": "fixture-party-1",
+  "hostSteam64": "76561198000000001",
+  "playerSteam64": "76561198000000001",
+  "character": "ironclad",
+  "act": "underdocks",
+  "neowRelic": "NeowsBones",
+  "neowChoiceResult": "neutral",
+  "observations": {
+    "firstFightGold": 12,
+    "firstRewardType": "commonPotion",
+    "event.firstQuestionRoom": "combat",
+    "event.trashHeap": "Caltrops"
+  }
+}

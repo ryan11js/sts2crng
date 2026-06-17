@@ -114,6 +114,35 @@ label {
   font-weight: 700;
 }
 
+.field-group {
+  display: grid;
+  gap: 8px;
+}
+
+.field-title {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.offer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.inline-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.inline-note.warn {
+  color: var(--amber);
+}
+
 select,
 textarea {
   width: 100%;

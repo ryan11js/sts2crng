@@ -2,3 +2,6 @@ server*.log
 *.tmp
 .DS_Store
 Thumbs.db
+generated/
+data/runs.jsonl
+imports/discord/*.json

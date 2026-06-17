@@ -20,7 +20,172 @@ export const cursePoolRelics = [
   { id: "SilverCrucible", label: "Silver Crucible" }
 ];
 
+export const positivePoolRelics = [
+  { id: "ArcaneScroll", label: "Arcane Scroll" },
+  { id: "BoomingConch", label: "Booming Conch" },
+  { id: "GoldenPearl", label: "Golden Pearl" },
+  { id: "Kaleidoscope", label: "Kaleidoscope" },
+  { id: "LavaRock", label: "Lava Rock" },
+  { id: "LeadPaperweight", label: "Lead Paperweight" },
+  { id: "LostCoffer", label: "Lost Coffer" },
+  { id: "MassiveScroll", label: "Massive Scroll" },
+  { id: "NeowsTalisman", label: "Neow's Talisman" },
+  { id: "NeowsTorment", label: "Neow's Torment" },
+  { id: "NewLeaf", label: "New Leaf" },
+  { id: "NutritiousOyster", label: "Nutritious Oyster" },
+  { id: "PhialHolster", label: "Phial Holster" },
+  { id: "Pomander", label: "Pomander" },
+  { id: "PreciseScissors", label: "Precise Scissors" },
+  { id: "SmallCapsule", label: "Small Capsule" },
+  { id: "StoneHumidifier", label: "Stone Humidifier" },
+  { id: "WingedBoots", label: "Winged Boots" }
+];
+
+export const neowRelics = [
+  ...cursePoolRelics.map((relic) => ({ ...relic, pool: "curse" })),
+  ...positivePoolRelics.map((relic) => ({ ...relic, pool: "positive" }))
+];
+
+export const curseCards = [
+  "Clumsy",
+  "Debt",
+  "Decay",
+  "Doubt",
+  "Guilty",
+  "Injury",
+  "Normality",
+  "Regret",
+  "Shame",
+  "Writhe"
+];
+
+const neutralOutput = (label) => ({
+  label: `${label} output`,
+  options: [{ id: "neutral", label: "No extra random output to record", consumption: "neutral" }]
+});
+
+export const neowOutputConfigs = {
+  CursedPearl: {
+    label: "Cursed Pearl output",
+    options: [{ id: "greedGold", label: "Received Greed and 333 gold", consumption: "neutral" }]
+  },
+  HeftyTablet: {
+    label: "Hefty Tablet output",
+    options: [
+      { id: "unknown", label: "Rare card not recorded yet", consumption: "reward" },
+      { id: "recorded", label: "Rare card/result recorded", consumption: "reward" }
+    ]
+  },
+  LargeCapsule: {
+    label: "Large Capsule first relic",
+    options: [
+      { id: "unknown", label: "First relic not recorded yet", consumption: "reward" },
+      { id: "common", label: "Common relic", consumption: "reward" },
+      { id: "uncommon", label: "Uncommon relic", consumption: "reward" },
+      { id: "rare", label: "Rare relic", consumption: "reward" }
+    ]
+  },
+  LeafyPoultice: {
+    label: "Leafy Poultice first transform",
+    options: [
+      { id: "unknown", label: "First transform not recorded yet", consumption: "neutral" },
+      { id: "recorded", label: "First transform/result recorded", consumption: "neutral" }
+    ]
+  },
+  NeowsBones: {
+    label: "Neow's Bones curse",
+    options: [
+      { id: "unknown", label: "Curse not recorded yet", consumption: "unknown" },
+      ...curseCards.map((curse) => ({ id: curse, label: curse, consumption: "neutral" })),
+      {
+        id: "nicheBroken",
+        label: "A bonus relic was New Leaf or Kaleidoscope",
+        consumption: "niche"
+      }
+    ]
+  },
+  PrecariousShears: neutralOutput("Precarious Shears"),
+  SilkenTress: {
+    label: "Silken Tress output",
+    options: [
+      { id: "unknown", label: "Card pack/result not recorded yet", consumption: "reward" },
+      { id: "recorded", label: "Card pack/result recorded", consumption: "reward" }
+    ]
+  },
+  SilverCrucible: neutralOutput("Silver Crucible"),
+  ArcaneScroll: {
+    label: "Arcane Scroll output",
+    options: [
+      { id: "unknown", label: "Rare card not recorded yet", consumption: "reward" },
+      { id: "recorded", label: "Rare card/result recorded", consumption: "reward" }
+    ]
+  },
+  BoomingConch: neutralOutput("Booming Conch"),
+  GoldenPearl: {
+    label: "Golden Pearl output",
+    options: [{ id: "gold", label: "Gained 150 gold", consumption: "neutral" }]
+  },
+  Kaleidoscope: {
+    label: "Kaleidoscope output",
+    options: [
+      { id: "unknown", label: "Output not recorded yet", consumption: "niche" },
+      { id: "recorded", label: "Output recorded", consumption: "niche" }
+    ]
+  },
+  LavaRock: neutralOutput("Lava Rock"),
+  LeadPaperweight: {
+    label: "Lead Paperweight output",
+    options: [
+      { id: "unknown", label: "Colorless card not recorded yet", consumption: "reward" },
+      { id: "recorded", label: "Colorless card/result recorded", consumption: "reward" }
+    ]
+  },
+  LostCoffer: {
+    label: "Lost Coffer output",
+    options: [
+      { id: "unknown", label: "Card reward/potion not recorded yet", consumption: "reward" },
+      { id: "recorded", label: "Card reward/potion recorded", consumption: "reward" }
+    ]
+  },
+  MassiveScroll: {
+    label: "Massive Scroll output",
+    options: [
+      { id: "unknown", label: "Multiplayer card not recorded yet", consumption: "reward" },
+      { id: "recorded", label: "Multiplayer card/result recorded", consumption: "reward" }
+    ]
+  },
+  NeowsTalisman: neutralOutput("Neow's Talisman"),
+  NeowsTorment: neutralOutput("Neow's Torment"),
+  NewLeaf: {
+    label: "New Leaf output",
+    options: [
+      { id: "unknown", label: "Transform not recorded yet", consumption: "niche" },
+      { id: "recorded", label: "Transform/result recorded", consumption: "niche" }
+    ]
+  },
+  NutritiousOyster: neutralOutput("Nutritious Oyster"),
+  PhialHolster: neutralOutput("Phial Holster"),
+  Pomander: neutralOutput("Pomander"),
+  PreciseScissors: neutralOutput("Precise Scissors"),
+  SmallCapsule: {
+    label: "Small Capsule relic",
+    options: [
+      { id: "unknown", label: "Relic not recorded yet", consumption: "reward" },
+      { id: "common", label: "Common relic", consumption: "reward" },
+      { id: "uncommon", label: "Uncommon relic", consumption: "reward" },
+      { id: "rare", label: "Rare relic", consumption: "reward" }
+    ]
+  },
+  StoneHumidifier: neutralOutput("Stone Humidifier"),
+  WingedBoots: neutralOutput("Winged Boots")
+};
+
 const articleTables = {
+  actOneVariant: {
+    underdocks: 50,
+    overgrowth: 50
+  },
+
   actRelicDistribution: {
     underdocks: {
       CursedPearl: 11.95,
@@ -309,9 +474,9 @@ const articleRecipes = {
     label: "Act 1 variant",
     stream: "seed",
     relationship: "Act 1 branch is the first high-signal observation used by the article tables.",
-    tablePath: "tables.actRelicDistribution",
-    status: "tableOnly",
-    reason: "The current repo has article distributions but not the confirmed seed parser and Act-selection call order."
+    tablePath: "tables.actOneVariant",
+    status: "simulated",
+    reason: "The article states Underdocks is chosen when the base-seed act roll is less than 0.5; Overgrowth otherwise."
   },
   neowCursePoolRelic: {
     id: "neowCursePoolRelic",
@@ -414,6 +579,7 @@ export const articlePackV01070 = {
   sourceLabel: "Andy Tockman, Correlated randomness in Slay the Spire 2",
   sourceDate: "2026-06-15",
   mode: "single",
+  predictionSource: "article",
   supportedModes: ["single"],
   coop: {
     status: "planned",
@@ -452,5 +618,16 @@ export const versionPack = articlePackV01070;
 export const tables = articlePackV01070.tables;
 
 export function relicLabel(id) {
-  return cursePoolRelics.find((relic) => relic.id === id)?.label ?? id;
+  return neowRelics.find((relic) => relic.id === id)?.label ?? id;
+}
+
+export function isCursePoolRelic(id) {
+  return cursePoolRelics.some((relic) => relic.id === id);
+}
+
+export function neowOutputConfig(id) {
+  return neowOutputConfigs[id] ?? {
+    label: "Relic output",
+    options: [{ id: "unknown", label: "Pick a Neow relic first", consumption: "unknown" }]
+  };
 }

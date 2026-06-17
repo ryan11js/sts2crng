@@ -19,6 +19,8 @@
           <input type="hidden" id="patch" name="patch" value="v0.107.0">
           <input type="hidden" id="mode" name="mode" value="single">
           <input type="hidden" id="playerOffset" name="playerOffset" value="">
+          <input type="hidden" id="curseRelic" name="curseRelic" value="unknown">
+          <input type="hidden" id="neowConsumption" name="neowConsumption" value="unknown">
 
           <section class="panel-section">
             <h2>1. Start</h2>
@@ -46,20 +48,44 @@
 
           <section class="panel-section">
             <h2>2. Neow screen</h2>
+            <div class="field-group" aria-label="Neow relics offered">
+              <p class="field-title">Three relics offered</p>
+              <div class="offer-grid">
+                <label>
+                  Slot 1
+                  <select id="neowOffer1" name="neowOffer1" data-neow-offer>
+                    <option value="unknown">Empty</option>
+                  </select>
+                </label>
+
+                <label>
+                  Slot 2
+                  <select id="neowOffer2" name="neowOffer2" data-neow-offer>
+                    <option value="unknown">Empty</option>
+                  </select>
+                </label>
+
+                <label>
+                  Slot 3
+                  <select id="neowOffer3" name="neowOffer3" data-neow-offer>
+                    <option value="unknown">Empty</option>
+                  </select>
+                </label>
+              </div>
+              <p id="neow-pool-note" class="inline-note">Neow shows one curse-pool relic and two positive-pool relics.</p>
+            </div>
+
             <label>
-              Neow relic shown
-              <select id="curseRelic" name="curseRelic">
-                <option value="unknown">Not at Neow yet</option>
+              Relic picked
+              <select id="neowPickedRelic" name="neowPickedRelic">
+                <option value="unknown">Pick a relic from the three offers</option>
               </select>
             </label>
 
-            <label>
-              What you picked
-              <select id="neowConsumption" name="neowConsumption">
-                <option value="neutral">No card or random relic appeared</option>
-                <option value="reward">A card reward or random relic appeared</option>
-                <option value="niche">New Leaf or Kaleidoscope triggered</option>
-                <option value="unknown">Not sure yet</option>
+            <label id="neow-result-label">
+              <span id="neow-result-title">Relic output</span>
+              <select id="neowResult" name="neowResult">
+                <option value="unknown">Pick a Neow relic first</option>
               </select>
             </label>
           </section>

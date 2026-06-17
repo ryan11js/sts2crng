@@ -1,51 +1,32 @@
 import { cloneJson, getPath } from "./pack-tools.mjs";
+import { simulateSeedSweep } from "./sts2/recipes.mjs";
 
 const defaultTolerance = 0.25;
 
 export function buildGeneratedPack(articlePack, options = {}) {
   const samples = options.samples ?? 1000000;
   const seedStart = options.seedStart ?? 0;
-  const generatedTables = {};
-  const skippedRecipes = [];
-  const simulatedRecipes = [];
-
-  for (const recipe of Object.values(articlePack.recipes)) {
-    if (recipe.status !== "simulated") {
-      skippedRecipes.push({
-        id: recipe.id,
-        tablePath: recipe.tablePath,
-        reason: recipe.reason ?? "Recipe is article-backed only."
-      });
-      continue;
-    }
-
-    const implementation = simulatedRecipeImplementations[recipe.id];
-    if (!implementation) {
-      skippedRecipes.push({
-        id: recipe.id,
-        tablePath: recipe.tablePath,
-        reason: "Recipe is marked simulated but has no local implementation yet."
-      });
-      continue;
-    }
-
-    generatedTables[recipe.id] = implementation({
-      articlePack,
-      recipe,
-      samples,
-      seedStart
-    });
-    simulatedRecipes.push(recipe.id);
-  }
+  const mode = options.mode ?? articlePack.mode;
+  const steam64 = options.steam64 ?? null;
+  const simulation = simulateSeedSweep({
+    samples,
+    seedStart,
+    mode,
+    steam64
+  });
+  const simulatedRecipes = simulation.recipeReports.filter((recipe) => recipe.status === "simulated").map((recipe) => recipe.id);
+  const skippedRecipes = simulation.recipeReports.filter((recipe) => recipe.status !== "simulated");
 
   return {
-    id: `${articlePack.id}-local-generated`,
-    label: `${articlePack.label} local generated pack`,
+    id: `${articlePack.id}-${mode}-generated`,
+    label: `${articlePack.label} ${mode} generated pack`,
     basedOn: articlePack.id,
     sourceUrl: articlePack.sourceUrl,
     sourceLabel: articlePack.sourceLabel,
     sourceDate: articlePack.sourceDate,
-    mode: articlePack.mode,
+    mode,
+    predictionSource: mode === "coop" ? "generated-coop-calibrated" : "generated-single",
+    steam64: steam64 === null ? undefined : String(steam64),
     samples,
     seedRange: {
       start: seedStart,
@@ -53,14 +34,17 @@ export function buildGeneratedPack(articlePack, options = {}) {
     },
     deterministic: true,
     tables: cloneJson(articlePack.tables),
-    generatedTables,
+    generatedTables: simulation.generatedTables,
     recipes: cloneJson(articlePack.recipes),
     simulator: {
       simulatedRecipes,
       skippedRecipes,
+      recipeReports: simulation.recipeReports,
+      requiredCoreRecipes: simulation.requiredCoreRecipes,
+      mechanics: simulation.mechanics,
       tableFallback: true,
       note:
-        "Article tables are preserved as fallback data until each recipe graduates from tableOnly to simulated."
+        "Article tables are preserved as fallback data. Generated tables only come from encoded seed-sweep recipes."
     }
   };
 }
@@ -71,8 +55,11 @@ export function compareGeneratedToArticle(articlePack, generatedPack, options = 
   const skipped = [];
   const compared = [];
 
+  const reportsById = Object.fromEntries((generatedPack.simulator?.recipeReports ?? []).map((report) => [report.id, report]));
+
   for (const recipe of Object.values(articlePack.recipes)) {
-    if (recipe.status !== "simulated") {
+    const report = reportsById[recipe.id];
+    if (report?.status !== "simulated") {
       skipped.push(recipe.id);
       continue;
     }
